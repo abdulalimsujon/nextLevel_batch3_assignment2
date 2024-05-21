@@ -37,8 +37,6 @@ const deleteById = async (id: string) => {
 const updateProduct = async (id: string, payload: Partial<Tproduct>) => {
   const { variants, inventory, ...remainingData } = payload;
 
-  console.log(payload);
-
   const modifiedUpdatedData: Record<string, unknown> = {
     ...remainingData,
   };
@@ -53,12 +51,6 @@ const updateProduct = async (id: string, payload: Partial<Tproduct>) => {
       modifiedUpdatedData[`inventory.${key}`] = value;
     }
   }
-  // if (tags && Object.keys(tags).length) {
-  //   for (const [key, value] of Object.entries(tags)) {
-  //     modifiedUpdatedData[`tags.${key}`] = value;
-  //   }
-  // }
-
   const result = await Product.findByIdAndUpdate(
     { _id: id },
     modifiedUpdatedData,
