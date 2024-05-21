@@ -7,10 +7,66 @@ const createProduct = async (productData: Tproduct) => {
   return result;
 };
 
-const getAllProduct = async () => {
-  const result = await Product.find({});
+const getAllProduct = async (searchTerm: string) => {
+  if (searchTerm) {
+    const searchQuery = await Product.find({
+      $or: ['name', 'description', 'category'].map(field => ({
+        [field]: { $regex: searchTerm, $options: 'i' },
+      })),
+    });
 
-  console.log('result', result);
+    return searchQuery;
+  } else {
+    const result = await Product.find({});
+
+    return result;
+  }
+};
+
+const searchById = async (id: string) => {
+  const result = await Product.findById({ _id: id });
+
+  return result;
+};
+const deleteById = async (id: string) => {
+  const result = await Product.deleteOne({ _id: id });
+
+  return result;
+};
+
+const updateProduct = async (id: string, payload: Partial<Tproduct>) => {
+  const { variants, inventory, ...remainingData } = payload;
+
+  console.log(payload);
+
+  const modifiedUpdatedData: Record<string, unknown> = {
+    ...remainingData,
+  };
+
+  if (variants && Object.keys(variants).length) {
+    for (const [key, value] of Object.entries(variants)) {
+      modifiedUpdatedData[`variants.${key}`] = value;
+    }
+  }
+  if (inventory && Object.keys(inventory).length) {
+    for (const [key, value] of Object.entries(inventory)) {
+      modifiedUpdatedData[`inventory.${key}`] = value;
+    }
+  }
+  // if (tags && Object.keys(tags).length) {
+  //   for (const [key, value] of Object.entries(tags)) {
+  //     modifiedUpdatedData[`tags.${key}`] = value;
+  //   }
+  // }
+
+  const result = await Product.findByIdAndUpdate(
+    { _id: id },
+    modifiedUpdatedData,
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
 
   return result;
 };
@@ -18,4 +74,8 @@ const getAllProduct = async () => {
 export const productService = {
   createProduct,
   getAllProduct,
+  searchById,
+  deleteById,
+
+  updateProduct,
 };

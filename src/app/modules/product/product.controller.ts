@@ -2,8 +2,9 @@
 import { Request, Response } from 'express';
 
 import { productService } from './product.service';
-import productZodValidation from './zodValidationSchema';
+
 import { Tproduct } from './product.interface';
+import { productZodValidation } from './zodValidationSchema';
 
 const createProductIntoDb = async (req: Request, res: Response) => {
   try {
@@ -27,9 +28,10 @@ const createProductIntoDb = async (req: Request, res: Response) => {
 };
 const getAllProduct = async (req: Request, res: Response) => {
   try {
-    const result = await productService.getAllProduct();
+    const text = req.query.searchTerm;
 
-    console.log('sdghh', result);
+    const result = await productService.getAllProduct(text as string);
+
     res.status(200).json({
       success: true,
       message: 'Product fetched successfully',
@@ -43,8 +45,64 @@ const getAllProduct = async (req: Request, res: Response) => {
     });
   }
 };
+const searchByid = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const result = await productService.searchById(productId);
+    res.status(200).json({
+      success: true,
+      message: 'Product fetched successfully',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: true,
+      message: 'Product fetched failed',
+      error: error || 'something went wrong',
+    });
+  }
+};
+const deleteByid = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    await productService.deleteById(productId);
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully',
+      data: null,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: true,
+      message: 'Product delete failed',
+      error: error || 'something went wrong',
+    });
+  }
+};
+
+const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.productId;
+    const payload = req.body;
+    await productService.updateProduct(productId, payload);
+    res.status(200).json({
+      success: true,
+      message: 'Product updated successfully',
+      data: null,
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: true,
+      message: 'Product updated failed',
+      error: error || 'something went wrong',
+    });
+  }
+};
 
 export const productController = {
   createProductIntoDb,
   getAllProduct,
+  searchByid,
+  deleteByid,
+  updateProduct,
 };
