@@ -9,22 +9,25 @@ const createProduct = async (productData: Tproduct) => {
 
 const getAllProduct = async (searchTerm: string) => {
   if (searchTerm) {
-    const searchQuery = await Product.find({
-      $or: ['name', 'description', 'category'].map(field => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
-      })),
-    });
+    const searchQuery = await Product.find(
+      {
+        $or: ['name', 'description', 'category'].map(field => ({
+          [field]: { $regex: searchTerm, $options: 'i' },
+        })),
+      },
+      { _id: 0 },
+    );
 
     return searchQuery;
   } else {
-    const result = await Product.find({});
+    const result = await Product.find({}, { _id: 0 });
 
     return result;
   }
 };
 
 const searchById = async (id: string) => {
-  const result = await Product.findById({ _id: id });
+  const result = await Product.findById({ _id: id }, { _id: 0 });
 
   return result;
 };
