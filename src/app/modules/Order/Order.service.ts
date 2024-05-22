@@ -8,6 +8,13 @@ const createOrderIntoDb = async (orderData: Torders) => {
 
   const data = currentQuantity - orderData.quantity;
 
+  if (!productInfo) {
+    return {
+      success: false,
+      message: 'Order not found',
+    };
+  }
+
   if (currentQuantity <= 0) {
     await Product.findByIdAndUpdate(
       { _id: orderData?.productId },
