@@ -42,6 +42,12 @@ const createOrderIntoDb = async (orderData: Torders) => {
 const getOrder = async (email: string) => {
   if (email) {
     const result = await Order.findOne({ email });
+    if (!result) {
+      return {
+        success: false,
+        message: 'order not found',
+      };
+    }
     return result;
   } else {
     const result = await Order.find({});
