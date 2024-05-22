@@ -2,6 +2,7 @@ import { Product } from '../product/product.model';
 import { Torders } from './Order.interface';
 import { Order } from './Order.model';
 
+///---------------------create the order------------------------------------->
 const createOrderIntoDb = async (orderData: Torders) => {
   const productInfo = await Product.findById({ _id: orderData.productId });
   const currentQuantity = productInfo?.inventory?.quantity as number;
@@ -42,6 +43,7 @@ const createOrderIntoDb = async (orderData: Torders) => {
 const getOrder = async (email: string) => {
   if (email) {
     const result = await Order.findOne({ email });
+
     if (!result) {
       return {
         success: false,

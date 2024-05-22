@@ -19,6 +19,8 @@ function isOrderResult(obj: any): obj is OrderResult {
   );
 }
 
+/// --------------create order----------------------------------->
+
 const createOrders = async (req: Request, res: Response) => {
   try {
     const order = req.body;
@@ -48,6 +50,7 @@ const createOrders = async (req: Request, res: Response) => {
   }
 };
 
+// ------------------get Order with email or all Orders------------>
 const getOrders = async (req: Request, res: Response) => {
   try {
     const email = req.query.email;

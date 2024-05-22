@@ -6,6 +6,8 @@ import { productService } from './product.service';
 import { Tproduct } from './product.interface';
 import { productZodValidation } from './zodValidationSchema';
 
+/// -----------------create the product---------------------------->
+
 const createProductIntoDb = async (req: Request, res: Response) => {
   try {
     const product = req.body;
@@ -26,6 +28,8 @@ const createProductIntoDb = async (req: Request, res: Response) => {
     });
   }
 };
+
+// --------------------get all product or get inSearchTerm --------------->
 const getAllProduct = async (req: Request, res: Response) => {
   try {
     const text = req.query.searchTerm;
@@ -45,6 +49,8 @@ const getAllProduct = async (req: Request, res: Response) => {
     });
   }
 };
+
+/// -------------------search with id----------------------------------->
 const searchByid = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
@@ -62,6 +68,8 @@ const searchByid = async (req: Request, res: Response) => {
     });
   }
 };
+
+//----------------------delete with id------------------------------------>
 const deleteByid = async (req: Request, res: Response) => {
   try {
     const productId = req.params.productId;
@@ -79,6 +87,8 @@ const deleteByid = async (req: Request, res: Response) => {
     });
   }
 };
+
+///--------------------update with id partailly or entirely--------------->
 
 const updateProduct = async (req: Request, res: Response) => {
   try {
