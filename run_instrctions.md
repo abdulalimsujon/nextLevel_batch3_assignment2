@@ -1,0 +1,31 @@
+
+
+ Here is the instructions on how to run the application locally.
+
+
+
+step 1: git clone---->  https://github.com/abdulalimsujon/nextLevel_batch3_assignment2.git
+
+step 2: go to folder and open it in vscode in commad in cmd---->code .
+
+nextLevel_batch3_assignment2
+
+ step 3: install all package -->   npm i 
+
+step 4: create .env file in the root and paste the below:
+
+NODE_ENV=development
+PORT=5000
+DATABASE_URL=mongodb+srv://ecommerce:ecommerce123456@cluster0.xtmq19x.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0
+
+
+5. from the package.json--
+
+in terminal command  ------->  start:dev
+
+
+
+
+
+
+
