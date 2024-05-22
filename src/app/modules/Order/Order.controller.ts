@@ -5,6 +5,20 @@ import { Torders } from './Order.interface';
 import { orderSchemaValidation } from './zod.validation';
 
 const createOrders = async (req: Request, res: Response) => {
+  type OrderResult = {
+    success: boolean;
+    message: string;
+  };
+
+  function isOrderResult(obj: any): obj is OrderResult {
+    return (
+      typeof obj === 'object' &&
+      'success' in obj &&
+      typeof obj.success === 'boolean' &&
+      'message' in obj &&
+      typeof obj.message === 'string'
+    );
+  }
   try {
     const order = req.body;
 
@@ -12,13 +26,20 @@ const createOrders = async (req: Request, res: Response) => {
 
     const result = await orderService.createOrderIntoDb(parseData as Torders);
 
-    res.status(200).json({
-      success: true,
-      message: 'Orders created successfully',
-      data: result,
-    });
+    if (isOrderResult(result)) {
+      res.status(200).json({
+        success: result.success,
+        message: result.message,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'Orders created successfully',
+        data: result,
+      });
+    }
   } catch (error: any) {
-    res.status(200).json({
+    res.status(400).json({
       success: true,
       message: 'Orders created failed',
       data: error.message || 'something went wrong',

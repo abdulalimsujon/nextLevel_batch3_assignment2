@@ -1,10 +1,35 @@
+import { Product } from '../product/product.model';
 import { Torders } from './Order.interface';
 import { Order } from './Order.model';
 
 const createOrderIntoDb = async (orderData: Torders) => {
-  const result = await Order.create(orderData);
+  const productInfo = await Product.findById({ _id: orderData.productId });
+  const currentQuantity = productInfo?.inventory?.quantity as number;
 
-  return result;
+  const data = currentQuantity - orderData.quantity;
+
+  if (currentQuantity <= 0) {
+    await Product.findByIdAndUpdate(
+      { _id: orderData?.productId },
+      { $set: { 'inventory.inStock': false } },
+    );
+  }
+
+  if (currentQuantity < orderData.quantity) {
+    return {
+      success: false,
+      message: 'Insufficient quantity available in inventory',
+    };
+  } else {
+    await Product.findByIdAndUpdate(
+      { _id: orderData?.productId },
+      { $set: { 'inventory.quantity': data } },
+    );
+
+    const result = await Order.create(orderData);
+
+    return result;
+  }
 };
 
 const getOrder = async (email: string) => {

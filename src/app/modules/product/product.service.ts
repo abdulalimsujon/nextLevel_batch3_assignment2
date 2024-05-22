@@ -15,7 +15,7 @@ const getAllProduct = async (searchTerm: string) => {
           [field]: { $regex: searchTerm, $options: 'i' },
         })),
       },
-      { _id: 0 },
+      // { _id: 0 },
     );
 
     return searchQuery;
